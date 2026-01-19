@@ -1,0 +1,14 @@
+import pandas as pd
+
+df = pd.read_csv("reports/kpi_summary.csv")
+
+latest_month = df['month'].max()
+
+monthly_report = df[df['month'] == latest_month]
+
+monthly_report.to_csv(
+    "reports/monthly_performance_report.csv",
+    index=False
+)
+
+print(f"Monthly report generated for {latest_month}")
