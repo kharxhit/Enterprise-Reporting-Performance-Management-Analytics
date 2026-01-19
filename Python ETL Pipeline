@@ -1,0 +1,18 @@
+import pandas as pd
+
+# Load raw data
+df = pd.read_csv("data/raw/transactions.csv")
+
+# Standardize columns
+df.columns = df.columns.str.lower()
+
+# Date parsing
+df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+
+# Remove invalid transactions
+df = df[df['amount'] > 0]
+
+# Save processed data
+df.to_csv("data/processed/transactions_cleaned.csv", index=False)
+
+print("ETL completed successfully")
