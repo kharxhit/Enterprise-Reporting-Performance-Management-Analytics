@@ -1,0 +1,15 @@
+import pandas as pd
+
+df = pd.read_csv("data/processed/transactions_cleaned.csv")
+
+df['month'] = pd.to_datetime(df['transaction_date']).dt.to_period('M')
+
+kpi = df.groupby(['month', 'department', 'category']).agg(
+    total_spend=('amount', 'sum'),
+    txn_count=('transaction_id', 'count'),
+    avg_txn_value=('amount', 'mean')
+).reset_index()
+
+kpi.to_csv("reports/kpi_summary.csv", index=False)
+
+print("KPI calculations completed")
