@@ -1,0 +1,15 @@
+import pandas as pd
+
+df = pd.read_csv("data/processed/transactions_cleaned.csv")
+
+stats = df.groupby('category')['amount'].agg(['mean', 'std']).reset_index()
+
+df = df.merge(stats, on='category')
+
+df['anomaly'] = df['amount'] > df['mean'] + 3 * df['std']
+
+anomalies = df[df['anomaly']]
+
+anomalies.to_csv("reports/spend_anomalies.csv", index=False)
+
+print("Anomaly detection completed")
