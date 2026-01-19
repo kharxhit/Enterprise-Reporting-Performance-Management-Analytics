@@ -1,0 +1,17 @@
+CREATE TABLE transactions (
+    transaction_id      BIGINT PRIMARY KEY,
+    transaction_date    DATE,
+    department          VARCHAR(50),
+    category            VARCHAR(50),
+    vendor              VARCHAR(100),
+    amount              DECIMAL(12,2),
+    payment_type        VARCHAR(20),
+    is_flagged           BOOLEAN
+);
+
+CREATE TABLE budgets (
+    department       VARCHAR(50),
+    category         VARCHAR(50),
+    monthly_budget   DECIMAL(12,2),
+    month            DATE
+);
