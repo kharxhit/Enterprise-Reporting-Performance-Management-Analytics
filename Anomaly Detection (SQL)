@@ -1,0 +1,19 @@
+WITH stats AS (
+    SELECT
+        category,
+        AVG(amount) AS mean_amt,
+        STDDEV(amount) AS std_amt
+    FROM transactions
+    GROUP BY category
+)
+
+SELECT
+    t.transaction_id,
+    t.category,
+    t.amount,
+    s.mean_amt,
+    s.std_amt
+FROM transactions t
+JOIN stats s
+  ON t.category = s.category
+WHERE t.amount > s.mean_amt + 3 * s.std_amt;
