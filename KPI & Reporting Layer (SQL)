@@ -1,0 +1,39 @@
+-- Monthly Spend
+SELECT
+    DATE_TRUNC('month', transaction_date) AS month,
+    department,
+    category,
+    SUM(amount) AS total_spend,
+    COUNT(transaction_id) AS txn_count,
+    AVG(amount) AS avg_transaction_value
+FROM transactions
+GROUP BY 1, 2, 3;
+
+
+
+-- Budget vs Actual
+SELECT
+    b.month,
+    t.department,
+    t.category,
+    SUM(t.amount) AS actual_spend,
+    b.monthly_budget,
+    (SUM(t.amount) - b.monthly_budget) AS variance
+FROM transactions t
+JOIN budgets b
+  ON t.department = b.department
+ AND t.category = b.category
+ AND DATE_TRUNC('month', t.transaction_date) = b.month
+GROUP BY 1, 2, 3, 5;
+
+
+
+-- Department Performance Scorecard
+SELECT
+    department,
+    COUNT(DISTINCT category) AS active_categories,
+    SUM(amount) AS total_spend,
+    AVG(amount) AS avg_spend,
+    SUM(CASE WHEN is_flagged THEN amount ELSE 0 END) AS risky_spend
+FROM transactions
+GROUP BY department;
